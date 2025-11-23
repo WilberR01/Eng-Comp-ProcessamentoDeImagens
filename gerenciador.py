@@ -25,6 +25,32 @@ class MotorDeAnalise:
         self._descobrir_analisadores()
 
     def _descobrir_analisadores(self):
+        # Tentativa robusta: importe dinamicamente todos os módulos em 'analisadores'
+        # para garantir que as subclasses de AnalisadorBase sejam registradas.
+        try:
+            import importlib
+            import sys
+            from pathlib import Path
+
+            project_root = Path(__file__).resolve().parent
+            analisadores_dir = project_root / "analisadores"
+            if analisadores_dir.exists() and analisadores_dir.is_dir():
+                for p in analisadores_dir.iterdir():
+                    if p.suffix == ".py" and not p.name.startswith("_"):
+                        mod_name = p.stem
+                        full_mod = f"analisadores.{mod_name}"
+                        try:
+                            if full_mod in sys.modules:
+                                importlib.reload(sys.modules[full_mod])
+                            else:
+                                importlib.import_module(full_mod)
+                            print(f"    [import] {full_mod}")
+                        except Exception as ie:
+                            print(f"    [!] Falha ao importar {full_mod}: {ie}")
+        except Exception:
+            # Não crítico: prosseguimos mesmo se a importação falhar
+            pass
+
         subclasses = AnalisadorBase.__subclasses__()
         print(f"[*] Sistema inicializado. {len(subclasses)} módulos de análise encontrados.")
 
