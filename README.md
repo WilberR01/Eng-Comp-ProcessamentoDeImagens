@@ -5,7 +5,7 @@ Este repositório contém um scaffold mínimo para executar módulos de análise
 - `models/` — classes modelo (`AnalysisResult`, `ResultItem`, `ConsolidatedReport`) para resultados tipados e serializáveis;
 - `services/runner.py` — runner que integra o motor com a UI;
 - `ui/` — aplicação web Flask para envio de imagens e visualização de relatórios (upload + gráficos);
-- `analyzers/` — (pasta) local para adicionar analisadores (cada um deve herdar `AnalisadorBase`).
+- `analisadores/` — (pasta) local para adicionar analisadores (cada um deve herdar `AnalisadorBase`).
 
 Este README explica como executar o projeto em outra máquina (Windows, PowerShell).
 
@@ -66,7 +66,7 @@ pytest -q
 ```
 
 ## Arquitetura e contrato dos analisadores
-- Para criar um novo analisador, adicione um módulo em `analyzers/` e defina uma classe que herde `AnalisadorBase` e implemente `processar`.
+- Para criar um novo analisador, adicione um .py em `analisadores/` e defina uma classe que herde `AnalisadorBase` e implemente `processar`.
 - Assinatura recomendada do método `processar`:
 
 ```py
@@ -84,7 +84,7 @@ class MeuAnalisador(AnalisadorBase):
         return AnalysisResult(detalhe="OK", metrics={"foo": 1})
 ```
 
-- O motor detecta automaticamente subclasses carregadas. Para garantir que seus analisadores sejam carregados, importe o módulo em `analyzers/__init__.py` ou use um pacote instalável.
+- O motor detecta automaticamente subclasses carregadas. Para garantir que seus analisadores sejam carregados, importe o módulo em `analisadores/__init__.py` ou use um pacote instalável.
 - O motor aceita que `processar` devolva um `dict` por compatibilidade legacy — ele converte `dict` em `AnalysisResult` internamente. Mas o ideal é retornar `AnalysisResult`.
 
 ## Formato dos resultados
