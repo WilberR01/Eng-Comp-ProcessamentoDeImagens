@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Eng-Comp - Analisador de Imagens</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Eng-Comp - Analisador de Imagens</h1>
+
+      <form action="/analyze" method="post" enctype="multipart/form-data">
+        <label for="file">Envie um arquivo de imagem:</label>
+        <input id="file" name="file" type="file" accept="image/*" />
+        <div class="buttons">
+          <button type="submit">Enviar e analisar</button>
+        </div>
+      </form>
+
+      {% if result is not none %}
+        <div class="result {{ 'ok' if result.success else 'error' }}">
+          {% if result.success %}
+            <h2>Relatório consolidado</h2>
+            {% if result._uploaded_filename %}
+              <p>Arquivo analisado: <a href="/uploads/{{ result._uploaded_filename }}" target="_blank">{{ result._uploaded_filename }}</a></p>
+            {% endif %}
+            <ul>
+            {% for mod, info in result.report.items() %}
+              <li>
+                <strong>{{ mod }}</strong>: {{ info.status }}
+                {% if info.status == 'ERRO' %}
+                  - {{ info.msg }}
+                {% else %}
+                  {% if info.dados is defined and info.dados.detalhe is defined %}
+                    -> {{ info.dados.detalhe }}
+                  {% endif %}
+                {% endif %}
+
+                {# If analyzer provided histogram data (bins & counts) render Chart.js canvas #}
+                {% if info.status == 'OK' and info.dados is defined and info.dados.metrics is defined and info.dados.metrics.bins is defined and info.dados.metrics.counts is defined %}
+                  <div class="chart-container">
+                    <canvas id="chart-{{ loop.index }}" width="640" height="240"></canvas>
+                  </div>
+                  <script>
+                    (function(){
+                      const binsExtracted = {{ info.dados.metrics.bins | tojson }};
+                      const countsExtracted = {{ info.dados.metrics.counts | tojson }};
+                      const ctx = document.getElementById('chart-{{ loop.index }}').getContext('2d');
+                      new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                          labels: binsExtracted,
+                          datasets: [{
+                            label: 'Contagem',
+                            data: countsExtracted,
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                          }]
+                        },
+                        options: {
+                          scales: {
+                            x: { display: false },
+                            y: { beginAtZero: true }
+                          },
+                          plugins: { legend: { display: false } }
+                        }
+                      });
+                    })();
+                  </script>
+                {% endif %}
+
+              </li>
+            {% endfor %}
+            </ul>
+          {% else %}
+            <h2>Erro</h2>
+            <p><strong>Mensagem:</strong> {{ result.error.message }}</p>
+            <p><strong>O que fazer:</strong> {{ result.error.suggestion }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <footer>
+        <small>Interface mínima para executar os analisadores existentes. Desenvolva novos módulos herdando de <code>AnalisadorBase</code>.</small>
+      </footer>
+    </div>
+  </body>
+  </html>
