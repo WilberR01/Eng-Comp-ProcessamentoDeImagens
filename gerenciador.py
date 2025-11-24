@@ -14,6 +14,11 @@ class AnalisadorBase(ABC):
     def nome_modulo(self) -> str:
         pass
 
+    @property
+    def ordem(self) -> int:
+        """Ordem de execução dos analisadores (menor = executado primeiro). Padrão: 999."""
+        return 999
+
     @abstractmethod
     def processar(self, caminho_imagem: str, conteudo: bytes = None) -> AnalysisResult:
         pass
@@ -58,9 +63,12 @@ class MotorDeAnalise:
             try:
                 instancia = cls()
                 self.analisadores.append(instancia)
-                print(f"    -> Módulo carregado: {instancia.nome_modulo}")
+                print(f"    -> Módulo carregado: {instancia.nome_modulo} (ordem: {instancia.ordem})")
             except Exception as e:
                 print(f"    [!] Erro ao instanciar o módulo {cls.__name__}: {e}")
+
+        # Ordenar analisadores pela propriedade 'ordem'
+        self.analisadores.sort(key=lambda a: a.ordem)
 
     def executar_pipeline(self, caminho_imagem: str) -> dict:
         print(f"\n{'='*60}")

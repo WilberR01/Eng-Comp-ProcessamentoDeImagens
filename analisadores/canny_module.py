@@ -32,6 +32,10 @@ class AnalisadorCannyPadrao(AnalisadorBase):
     def nome_modulo(self) -> str:
         return "Canny 1: Detecção Padrão (50-150)"
 
+    @property
+    def ordem(self) -> int:
+        return 50
+
     def processar(self, caminho_imagem: str, conteudo: bytes = None) -> AnalysisResult:
         img = carregar_imagem_segura(caminho_imagem, conteudo)
         if img is None: 
@@ -76,6 +80,10 @@ class AnalisadorCannySensivel(AnalisadorBase):
     def nome_modulo(self) -> str:
         return "Canny 2: Alta Sensibilidade (30-100)"
 
+    @property
+    def ordem(self) -> int:
+        return 51
+
     def processar(self, caminho_imagem: str, conteudo: bytes = None) -> AnalysisResult:
         img = carregar_imagem_segura(caminho_imagem, conteudo)
         if img is None: 
@@ -116,6 +124,10 @@ class AnalisadorCannyRigoroso(AnalisadorBase):
     def nome_modulo(self) -> str:
         return "Canny 3: Baixa Sensibilidade (100-200)"
 
+    @property
+    def ordem(self) -> int:
+        return 52
+
     def processar(self, caminho_imagem: str, conteudo: bytes = None) -> AnalysisResult:
         img = carregar_imagem_segura(caminho_imagem, conteudo)
         if img is None: 
@@ -155,6 +167,10 @@ class AnalisadorCannyComBlur(AnalisadorBase):
     @property
     def nome_modulo(self) -> str:
         return "Canny 4: Com Blur Gaussiano (Reduz Ruído)"
+
+    @property
+    def ordem(self) -> int:
+        return 53
 
     def processar(self, caminho_imagem: str, conteudo: bytes = None) -> AnalysisResult:
         img = carregar_imagem_segura(caminho_imagem, conteudo)

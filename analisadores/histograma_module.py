@@ -25,6 +25,10 @@ class AnalisadorHistogramaGray(AnalisadorBase):
     def nome_modulo(self) -> str:
         return "Histograma 1: Intensidade (Cinza/Luma)"
 
+    @property
+    def ordem(self) -> int:
+        return 60
+
     def processar(self, caminho_imagem: str, conteudo: bytes = None) -> AnalysisResult:
         img = carregar_imagem_segura(caminho_imagem, conteudo)
         if img is None: return AnalysisResult(detalhe="Erro imagem", metrics={})
@@ -47,6 +51,10 @@ class AnalisadorHistogramaRed(AnalisadorBase):
     @property
     def nome_modulo(self) -> str:
         return "Histograma 2: Canal Vermelho (R)"
+
+    @property
+    def ordem(self) -> int:
+        return 61
 
     def processar(self, caminho_imagem: str, conteudo: bytes = None) -> AnalysisResult:
         img = carregar_imagem_segura(caminho_imagem, conteudo)
@@ -77,6 +85,10 @@ class AnalisadorHistogramaGreen(AnalisadorBase):
     def nome_modulo(self) -> str:
         return "Histograma 3: Canal Verde (G)"
 
+    @property
+    def ordem(self) -> int:
+        return 62
+
     def processar(self, caminho_imagem: str, conteudo: bytes = None) -> AnalysisResult:
         img = carregar_imagem_segura(caminho_imagem, conteudo)
         if img is None: return AnalysisResult(detalhe="Erro imagem", metrics={})
@@ -101,6 +113,10 @@ class AnalisadorHistogramaBlue(AnalisadorBase):
     @property
     def nome_modulo(self) -> str:
         return "Histograma 4: Canal Azul (B)"
+
+    @property
+    def ordem(self) -> int:
+        return 63
 
     def processar(self, caminho_imagem: str, conteudo: bytes = None) -> AnalysisResult:
         img = carregar_imagem_segura(caminho_imagem, conteudo)
