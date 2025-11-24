@@ -117,6 +117,10 @@ class AnalisadorGLCM(AnalisadorBase):
     @property
     def nome_modulo(self) -> str:
         return "GLCM: Análise de Textura"
+
+    @property
+    def ordem(self) -> int:
+        return 70
     
     def processar(self, caminho_imagem: str, conteudo: bytes = None) -> AnalysisResult:
         try:
@@ -212,6 +216,10 @@ class AnalisadorGLCMContraste(AnalisadorBase):
     @property
     def nome_modulo(self) -> str:
         return "GLCM: Contraste e Homogeneidade"
+
+    @property
+    def ordem(self) -> int:
+        return 71
     
     def processar(self, caminho_imagem: str, conteudo: bytes = None) -> AnalysisResult:
         try:
@@ -254,6 +262,10 @@ class AnalisadorGLCMEnergiaEntropia(AnalisadorBase):
     @property
     def nome_modulo(self) -> str:
         return "GLCM: Energia e Entropia"
+
+    @property
+    def ordem(self) -> int:
+        return 72
     
     def processar(self, caminho_imagem: str, conteudo: bytes = None) -> AnalysisResult:
         try:

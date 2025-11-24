@@ -32,6 +32,10 @@ class AnalisadorLimiarizacaoSimples(AnalisadorBase):
     def nome_modulo(self) -> str:
         return "Limiarização 1: Global Simples (T=127)"
 
+    @property
+    def ordem(self) -> int:
+        return 10
+
     def processar(self, caminho_imagem: str, conteudo: bytes = None) -> AnalysisResult:
         img = carregar_imagem_segura(caminho_imagem, conteudo)
         if img is None: 
@@ -68,7 +72,11 @@ class AnalisadorLimiarizacaoSimples(AnalisadorBase):
 class AnalisadorLimiarizacaoOtsu(AnalisadorBase):
     @property
     def nome_modulo(self) -> str:
-        return "Limiarização 2: Método de Otsu (Automático)"
+        return "Limiarização 2: Otsu (Automática)"
+
+    @property
+    def ordem(self) -> int:
+        return 11
 
     def processar(self, caminho_imagem: str, conteudo: bytes = None) -> AnalysisResult:
         img = carregar_imagem_segura(caminho_imagem, conteudo)
@@ -103,7 +111,11 @@ class AnalisadorLimiarizacaoOtsu(AnalisadorBase):
 class AnalisadorLimiarizacaoAdaptativaMedia(AnalisadorBase):
     @property
     def nome_modulo(self) -> str:
-        return "Limiarização 3: Adaptativa (Média Local)"
+        return "Limiarização 3: Adaptativa Média"
+
+    @property
+    def ordem(self) -> int:
+        return 12
 
     def processar(self, caminho_imagem: str, conteudo: bytes = None) -> AnalysisResult:
         img = carregar_imagem_segura(caminho_imagem, conteudo)
@@ -141,7 +153,11 @@ class AnalisadorLimiarizacaoAdaptativaMedia(AnalisadorBase):
 class AnalisadorLimiarizacaoAdaptativaGaussiana(AnalisadorBase):
     @property
     def nome_modulo(self) -> str:
-        return "Limiarização 4: Adaptativa (Gaussiana)"
+        return "Limiarização 4: Adaptativa Gaussiana"
+
+    @property
+    def ordem(self) -> int:
+        return 13
 
     def processar(self, caminho_imagem: str, conteudo: bytes = None) -> AnalysisResult:
         img = carregar_imagem_segura(caminho_imagem, conteudo)
